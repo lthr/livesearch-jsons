@@ -19,13 +19,14 @@ for (var url in urls) {
       if (!error && response.statusCode === 200) {
         body._details = {
           'ENV': urls[url].indexOf('mock2') > -1 ? 'AITE' : 'SITE',
-          'COUNTRY': 'XX'
+          'COUNTRY': urls[url].substr(8, 2)
         };
         output.push(body);
       }
       count++;
+      console.log('--- Retrieving data (' + count + '/' + urls.length + ')');
       if (count == urls.length) {
-        fs.writeFile('./data.js', JSON.stringify(output), console.log('--- Saved!'));
+        fs.writeFile('./data.js', JSON.stringify(output), console.log('--- Finished!'));
       }
     });
   })(url);
