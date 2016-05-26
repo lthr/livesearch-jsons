@@ -10,32 +10,34 @@ $(window).load(function () {
       return str;
     }
 
-    var output = '<div class="row">';
-    $.getJSON('data.js', function (data) {
-      $.each(data, function (key, val) {
+    $.getJSON(['data.js'], function (data) {
+      var output = '<div class="row">';
 
-        var foundKey = '';
-        var foundValue = '';
-        var foundOutput = '';
+      $.each(data, function (key, val) {
+        var foundKey = '',
+            foundValue = '',
+            foundOutput = '';
 
         for (var v in val) {
-          if ((val[v].search(regex) != -1) || (v.search(regex) != -1)) {
-            v.search(regex) != -1 ? foundKey = markString(v) : foundKey = v;
-            val[v].search(regex) != -1 ? foundValue = markString(val[v]) : foundValue = val[v];
-            foundOutput += '<div class="key-value">' + foundKey + ': ' + foundValue + '</div>';
+          if (typeof val[v] != 'object') {
+            if ((val[v].search(regex) != -1) || (v.search(regex) != -1)) {
+              v.search(regex) != -1 ? foundKey = markString(v) : foundKey = v;
+              val[v].search(regex) != -1 ? foundValue = markString(val[v]) : foundValue = val[v];
+              foundOutput += '<div class="key-value">' + foundKey + ': ' + foundValue + '</div>';
+            }
           }
         }
 
         if (foundOutput) {
           output += '<div class="result">';
-          output += '<div class="link"><a href="#" target="_blank">' + val.name + '</a></div>';
+          output += '<div class="link"><a href="' + '" target="_blank">' + val.name + '</a></div>';
           output += foundOutput;
           output += '</div>';
         }
 
+        output += '</div>';
+        val._details.ENV == 'AITE' ? $('#aite').html('<h4>AITE</h4>' + output) : $('#site').html('<h4>SITE</h4>' + output);
       });
-      output += '</div>';
-      $('#results').html(output);
     });
   });
 });
