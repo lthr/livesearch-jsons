@@ -18,8 +18,8 @@ for (var url in urls) {
     }, function (error, response, body) {
       if (!error && response.statusCode === 200) {
         output.push(body);
-        count++;
       }
+      count++;
       if (count == urls.length) {
         fs.writeFile('./data.js', JSON.stringify(output), console.log('Saved!'));
       }
