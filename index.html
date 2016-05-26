@@ -9,14 +9,16 @@
 
 <h3>Find key or value in an array of JSONs</h3>
 
-<form role="form">
+<form role="form" id="form">
     <div class="form-group">
         <input type="email" class="form-control input-lg" id="search" placeholder="Search (regex)">
     </div>
+    <input type="radio" name="myRadio" value="" checked /> AITE and SITE <br />
+    <input type="radio" name="myRadio" value="AITE" /> Only AITE <br />
+    <input type="radio" name="myRadio" value="SITE" /> Only SITE <br />
 </form>
 
-<div id="aite"></div>
-<div id="site"></div>
+<div id="output"></div>
 
 <script src="node_modules/jquery/dist/jquery.min.js"></script>
 <script src="script.js"></script>

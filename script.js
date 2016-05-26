@@ -1,5 +1,11 @@
 $(window).load(function () {
 
+  var env = $('input[name="myRadio"]:checked', '#form').val();
+  $('#form input').on('change', function() {
+    env = $('input[name="myRadio"]:checked', '#form').val();
+    $('#search').keyup();
+  });
+
   $('#search').keyup(function () {
     var searchField = $('#search').val();
     var regex = new RegExp(searchField, "i");
@@ -10,9 +16,8 @@ $(window).load(function () {
       return str;
     }
 
+    var output = '';
     $.getJSON(['data.js'], function (data) {
-      var output = '<div class="row">';
-
       $.each(data, function (key, val) {
         var foundKey = '',
             foundValue = '',
@@ -28,16 +33,15 @@ $(window).load(function () {
           }
         }
 
-        if (foundOutput) {
+        if (foundOutput && (env == val._details.ENV || env == '')) {
           output += '<div class="result">';
-          output += '<div class="link"><a href="' + '" target="_blank">' + val.name + '</a></div>';
+          output += '<div class="link"><a href="' + '" target="_blank">' + val._details.ENV + '</a></div>';
           output += foundOutput;
           output += '</div>';
         }
 
-        output += '</div>';
-        val._details.ENV == 'AITE' ? $('#aite').html('<h4>AITE</h4>' + output) : $('#site').html('<h4>SITE</h4>' + output);
       });
+      $('#output').html(output);
     });
   });
 });
