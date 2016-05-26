@@ -11,7 +11,7 @@ $(window).load(function () {
     }
 
     var output = '<div class="row">';
-    $.getJSON('https://raw.githubusercontent.com/lthr/livesearch-jsons/gh-pages/data.js', function (data) {
+    $.getJSON('data.js', function (data) {
       $.each(data, function (key, val) {
 
         var foundKey = '';
