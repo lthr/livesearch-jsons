@@ -1,0 +1,23 @@
+{
+  "name": "livesearch-jsons",
+  "version": "1.0.0",
+  "description": "",
+  "main": "make-json-array.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lthr/livesearch-jsons.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lthr/livesearch-jsons/issues"
+  },
+  "homepage": "https://github.com/lthr/livesearch-jsons#readme",
+  "devDependencies": {
+    "request": "^2.72.0"
+  }
+}
