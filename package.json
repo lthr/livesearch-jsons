@@ -19,5 +19,8 @@
   "homepage": "https://github.com/lthr/livesearch-jsons#readme",
   "devDependencies": {
     "request": "^2.72.0"
+  },
+  "dependencies": {
+    "jquery": "^2.2.4"
   }
 }

@@ -1,0 +1,17 @@
+.result {
+    margin: 10px 10px 10px;
+}
+
+.key-value {
+    color: #555;
+    font-size: 13px;
+}
+
+.mark-string {
+    color: #000;
+    font-weight: bold;
+}
+
+.link {
+    font-size: 15px;
+}
