@@ -13,13 +13,13 @@ var output = [],
 for (var url in urls) {
   (function (url) {
     request({
-      url: urls[url],
+      url: url,
       json: true
     }, function (error, response, body) {
       if (!error && response.statusCode === 200) {
         body._details = {
-          'ENV': urls[url].indexOf('mock2') > -1 ? 'AITE' : 'SITE',
-          'COUNTRY': urls[url].substr(8, 2)
+          'ENV': url.indexOf('mock2') > -1 ? 'AITE' : 'SITE',
+          'COUNTRY': url.substr(8, 2)
         };
         output.push(body);
       }
@@ -29,5 +29,5 @@ for (var url in urls) {
         fs.writeFile('./data.js', JSON.stringify(output), console.log('--- Finished!'));
       }
     });
-  })(url);
+  })(urls[url]);
 }
