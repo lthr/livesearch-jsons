@@ -12,8 +12,8 @@ $(window).load(function () {
     var regex = new RegExp(searchField, "i");
 
     function highlightStr(str) {
-      var re = new RegExp(searchField, "g");
-      str = str.replace(re, '<span class="mark-string">' + searchField + '</span>');
+      //var re = new RegExp(searchField, "g");
+      //str = str.replace(re, '<span class="mark-string">' + searchField + '</span>');
       return str;
     }
 
