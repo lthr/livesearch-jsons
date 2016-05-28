@@ -113,7 +113,7 @@ $(window).load(function () {
           output += '</div>';
         }
       });
-      //if (!searchField) output = '';
+      if (!searchField) output = '';
       $('#output').html(output);
     });
   });
