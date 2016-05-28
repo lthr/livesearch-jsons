@@ -2,23 +2,38 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Live Search JSON</title>
+    <title>AITE/SITE Customer Search</title>
+    <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
 
-<h3>Find key or value in an array of JSONs</h3>
+<div class="container">
+    <div class="page-header">
+        <h2>Holdings Service Customer Search
+            <small>AITE/SITE</small>
+        </h2>
 
-<form role="form" id="form">
-    <div class="form-group">
-        <input class="form-control input-lg" id="search" placeholder="Search (regex)">
+        <form role="form" id="form">
+            <div class="form-group">
+                <label for="usr">Key/Value:</label>
+                <input type="text" class="form-control" id="search" placeholder="You can use RegEx" autofocus>
+            </div>
+            <div class="radio">
+                <label><input type="radio" name="optradio" value="" checked>All</label>
+            </div>
+            <div class="radio">
+                <label><input type="radio" name="optradio" value="AITE">AITE</label>
+            </div>
+            <div class="radio disabled">
+                <label><input type="radio" name="optradio" value="SITE">SITE</label>
+            </div>
+        </form>
     </div>
-    <input type="radio" name="myRadio" value="" checked /> AITE and SITE <br />
-    <input type="radio" name="myRadio" value="AITE" /> Only AITE <br />
-    <input type="radio" name="myRadio" value="SITE" /> Only SITE <br />
-</form>
 
-<div id="output"></div>
+    <div id="output"></div>
+
+</div>
 
 <script src="node_modules/jquery/dist/jquery.min.js"></script>
 <script src="script.js"></script>

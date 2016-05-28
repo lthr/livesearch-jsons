@@ -1,12 +1,9 @@
 $(window).load(function () {
 
-  var accountTypeSpecificationsCounter,
-      holdingsCounter,
-      holdingsInstrumentCounter;
-
-  var env = $('input[name="myRadio"]:checked', '#form').val();
+  // select aite/site output
+  var env = $('input[name="optradio"]:checked', '#form').val();
   $('#form input').on('change', function () {
-    env = $('input[name="myRadio"]:checked', '#form').val();
+    env = $('input[name="optradio"]:checked', '#form').val();
     $('#search').keyup();
   });
 
@@ -14,13 +11,13 @@ $(window).load(function () {
     var searchField = $('#search').val();
     var regex = new RegExp(searchField, "i");
 
-    function markString(str) {
+    function highlightStr(str) {
       var re = new RegExp(searchField, "g");
       str = str.replace(re, '<span class="mark-string">' + searchField + '</span>');
       return str;
     }
 
-    function indentation(s, ind) {
+    function indent(s, ind) {
       ind = ind || 0;
       var spacing = 20;
       while (ind--) {
@@ -29,119 +26,94 @@ $(window).load(function () {
       return '<div style="margin-left: ' + spacing + 'px">' + s + '</div>';
     }
 
-    function keyClass(s) {
-      return '<span class="key">' + s + ':</span>';
+    function catEnd(s, ind) {
+      return indent('<span class="key">' + s + '</span>', ind);
     }
 
-    function groupClass(s, ind) {
-      return indentation('<span class="key">' + s + '</span>', ind);
+    function catBegin(cat, bracket, ind) {
+      return indent('<span class="key">' + cat + ':</span><span class="key">' + bracket + '</span>', ind);
     }
 
-    function valueClass(s) {
-      return '<span class="value">' + s + '</span>';
-    }
-
-    function foundKeyOrVal(key, val) {
+    function keyOrValFoundInStr(key, val) {
       return (key.search(regex) != -1) || (val.toString().search(regex) != -1);
     }
 
-    function formatOutput(key, val, indent, alwaysShow) {
-      var foundKey = '',
-          foundValue = '',
+    function keyVal(key, val, ind) {
+      var k = '',
+          v = '',
           output = '';
       if (typeof val == 'boolean' || typeof val == 'number') val = val.toString();
       if (typeof val == 'string') {
-        if (foundKeyOrVal(key, val)) {
-          key.search(regex) != -1 ? foundKey = markString(key) : foundKey = key;
-          val.search(regex) != -1 ? foundValue = markString(val) : foundValue = val;
-          output = indentation(keyClass(key) + valueClass(val), indent);
+        if (keyOrValFoundInStr(key, val)) {
+          k = (key.search(regex) != -1) ? highlightStr(key) : key;
+          v = (val.search(regex) != -1) ? highlightStr(val) : val;
+          output = indent('<span class="key">' + k + ':</span><span class="value">' + v + '</span>', ind);
         }
       }
-      if (!output && alwaysShow) output = indentation(keyClass(key) + valueClass(val), indent);
       return output;
+    }
+
+    function catWithKeyVals(catKey, val, ind) {
+      var s = '';
+      for (var key in val) {
+        s += keyVal(key, val[key], ind + 1);
+      }
+      return s ? catBegin(catKey, '{', ind) + s + catEnd('}', ind) : '';
     }
 
     var output = '';
     $.getJSON(['data.js'], function (data) {
       $.each(data, function (index, customer) {
-        var foundKey = '',
-            foundValue = '',
-            foundOutput = '',
-            fpoUrl = 'https://intservices-' + customer._details.ENV.toLowerCase() + '.sed1.root4.net/fpo/#/' + customer._details.COUNTRY + '/' + customer._details.CUSTOMER;
 
-        var accountTypeSpecificationsCounter = 0,
-            holdingsCounter = 0,
-            holdingsInstrumentCounter = 0,
-            holdingsPositionCounter = 0,
-            holdingsInstrumentOutput = '';
-
-
-        foundOutput += formatOutput('accounts', '[', 0, true);
+        var accountStr = '';
         for (var i = 0; i < customer.accounts.length; i++) {
-          foundOutput += groupClass('{', 1);
-          $.each(customer.accounts[i], function (key, val) {
-                foundOutput += formatOutput(key, val, 2);
 
-                var tempOutput = '';
+          $.each(customer.accounts[i], function (key, val) {
+                accountStr += keyVal(key, val, 2);
+
+                // accountTypeSpecifications
                 if (typeof val == 'object' && key == 'accountTypeSpecifications') {
-                  tempOutput += formatOutput(key, '{', 2, true);
-                  for (var v in val) {
-                    if (foundKeyOrVal(v, val[v])) accountTypeSpecificationsCounter++;
-                    tempOutput += formatOutput(v, val[v], 3);
-                  }
-                  tempOutput += groupClass('}', 2);
+                  accountStr += catWithKeyVals(key, val, 2);
                 }
-                if (accountTypeSpecificationsCounter) foundOutput += tempOutput;
 
                 // holdings
-                var holdingsOutput = '';
                 if (typeof val == 'object' && key == 'holdings') {
-                  holdingsCounter = 0;
-                  holdingsInstrumentCounter = 0;
-                  holdingsPositionCounter = 0;
-                  holdingsOutput += formatOutput(key, '[', 2, true);
-                  for (holding in val) {
+                  var holdingsStr;
+                  for (var holding in val) {
+                    holdingsStr = '';
                     for (var h in val[holding]) {
-                      if (foundKeyOrVal(h, val[holding][h])) holdingsCounter++;
+
+                      // holdings instrument
                       if (typeof val[holding][h] == 'object' && h == 'instrument') {
-                        holdingsInstrumentOutput = '';
-                        holdingsInstrumentOutput += formatOutput(h, '{', 4, true);
-                        for (var h2 in val[holding][h]) {
-                          if (foundKeyOrVal(h2, val[holding][h][h2])) holdingsInstrumentCounter++;
-                          holdingsInstrumentOutput += formatOutput(h2, val[holding][h][h2], 5);
-                        }
-                        holdingsInstrumentOutput += groupClass('}', 4);
+                        holdingsStr += catWithKeyVals(h, val[holding][h], 3);
                       }
+
+                      // holdings position
                       if (typeof val[holding][h] == 'object' && h == 'position') {
-                        holdingsPositionOutput = '';
-                        holdingsPositionOutput += formatOutput(h, '{', 4, true);
-                        for (var h2 in val[holding][h]) {
-                          if (foundKeyOrVal(h2, val[holding][h][h2])) holdingsPositionCounter++;
-                          holdingsPositionOutput += formatOutput(h2, val[holding][h][h2], 5);
-                        }
-                        holdingsPositionOutput += groupClass('}', 4);
+                        holdingsStr += catWithKeyVals(h, val[holding][h], 3);
                       }
                     }
-                    if (holdingsInstrumentCounter + holdingsPositionCounter) holdingsOutput += groupClass('{X', 3);
-                    if (holdingsInstrumentCounter) holdingsOutput += holdingsInstrumentOutput;
-                    if (holdingsPositionCounter) holdingsOutput += holdingsPositionOutput;
-                    if (holdingsInstrumentCounter + holdingsPositionCounter) holdingsOutput += groupClass('}X', 3);
+                    accountStr += holdingsStr ? catBegin(key, '[', 2) + holdingsStr + catEnd(']', 2) : '';
                   }
-                  holdingsOutput += groupClass(']', 2);
                 }
-                if (holdingsCounter + holdingsInstrumentCounter + holdingsPositionCounter) foundOutput += holdingsOutput;
               }
           );
-          foundOutput += groupClass('}', 1);
         }
-        if (foundOutput && (env == customer._details.ENV || env == '')) {
-          output += '<div class="result">';
-          output += '<div class="link">' + customer._details.COUNTRY.toUpperCase() + ' ' + customer._details.CUSTOMER + ' &nbsp; <a href="' + fpoUrl + '" target="_blank">FPO</a></div>';
-          output += foundOutput;
+        accountStr = accountStr ? catEnd('{', 1) + accountStr + catEnd('}', 1) : '';
+        if (accountStr && (env == customer._details.ENV || env == '')) {
+          accountStr = catBegin('accounts', '[', 0) + accountStr + catEnd(']', 0);
+          var fpoUrl = 'https://intservices-'
+              + customer._details.ENV.toLowerCase()
+              + '.sed1.root4.net/fpo/#/'
+              + customer._details.COUNTRY
+              + '/' + customer._details.CUSTOMER;
+          output += '<div class="panel panel-info">';
+          output += '<div class="panel-heading">' + customer._details.COUNTRY.toUpperCase() + ' ' + customer._details.CUSTOMER + ' <span style="float: right"><a href="' + fpoUrl + '" target="_blank">FPO ' + customer._details.ENV + '</a></span> </div>';
+          output += '<div class="panel-body">' + accountStr + '</div>';
           output += '</div>';
         }
       });
-      if (!searchField) output = '';
+      //if (!searchField) output = '';
       $('#output').html(output);
     });
   });
