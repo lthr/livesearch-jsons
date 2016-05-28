@@ -25,11 +25,26 @@
       },
       "position": {
         "quantity": 578950,
-        "prices": [{
-          "data": {"amount": {"amount": 1, "currency": "SEK"}, "source": "LEGACY", "order": 3},
-          "marketValue": {"amount": 578950, "currency": "SEK"},
-          "marketValueInLocalCurrency": {"amount": 578950, "currency": "SEK"}
-        }]
+        "prices": [
+          {
+            "data": {
+              "amount": {
+                "amount": 1,
+                "currency": "SEK"
+              },
+              "source": "LEGACY",
+              "order": 3
+            },
+            "marketValue": {
+              "amount": 578950,
+              "currency": "SEK"
+            },
+            "marketValueInLocalCurrency": {
+              "amount": 578950,
+              "currency": "SEK"
+            }
+          }
+        ]
       }
     }]
   }, {
@@ -128,15 +143,30 @@
       },
       "position": {
         "quantity": 157.282671,
-        "prices": [{
-          "data": {"amount": {"amount": 163.334, "currency": "SEK"}, "source": "SIR", "order": 1},
-          "marketValue": {"amount": 25689.607785114, "currency": "SEK"},
-          "marketValueInLocalCurrency": {"amount": 25689.607785114, "currency": "SEK"}
-        }, {
-          "data": {"amount": {"amount": 2170.1647, "currency": "SEK"}, "source": "LEGACY", "order": 3},
-          "marketValue": {"amount": 341329.3, "currency": "SEK"},
-          "marketValueInLocalCurrency": {"amount": 341329.3, "currency": "SEK"}
-        }]
+        "prices": [
+          {
+            "data": {
+              "amount": {
+                "amount": 163.334,
+                "currency": "SEK"
+              },
+              "source": "SIR",
+              "order": 1
+            },
+            "marketValue": {
+              "amount": 25689.607785114,
+              "currency": "SEK"
+            },
+            "marketValueInLocalCurrency": {
+              "amount": 25689.607785114,
+              "currency": "SEK"
+            }
+          },
+          {
+            "data": {"amount": {"amount": 2170.1647, "currency": "SEK"}, "source": "LEGACY", "order": 3},
+            "marketValue": {"amount": 341329.3, "currency": "SEK"},
+            "marketValueInLocalCurrency": {"amount": 341329.3, "currency": "SEK"}
+          }]
       }
     }, {
       "instrument": {

@@ -1,12 +1,12 @@
 .key {
     font-family: monospace;
-    font-family: monospace;
     font-weight: bold;
     color: black;
     margin-right: 10px;
 }
 
 .value {
+    font-family: monospace;
     font-weight: normal;
     color: green;
 }
